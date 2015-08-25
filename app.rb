@@ -3,8 +3,6 @@ require 'json'
 
 class ProduceMarketServer
 
-  # attr_reader @prices
-
   MAX_HANDS = 4
 
   def initialize
