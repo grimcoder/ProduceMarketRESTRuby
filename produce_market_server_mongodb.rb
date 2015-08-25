@@ -27,10 +27,8 @@ class ProduceMarketServerMongodb
   end
 
   def getPrice(i)
-
     prices = @client['prices'].find(:_id => BSON::ObjectId(i)).to_a
     idify(prices)
-
   end
 
   def getSales
@@ -39,12 +37,13 @@ class ProduceMarketServerMongodb
   end
 
   def getSale(i)
-    prices = @client['sales'].find(:_id => BSON::ObjectId(i)).to_a
-    idify(prices)
+    sales = @client['sales'].find(:_id => BSON::ObjectId(i)).to_a
+    idify(sales)
   end
 
   def getPriceChanges
-    return @priceChanges
+    pricechanges = @client['priceChanges'].find.to_a
+    idify(pricechanges)
   end
 
   def updatePrice(ng_params)
