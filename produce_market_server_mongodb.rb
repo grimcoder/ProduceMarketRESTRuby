@@ -1,4 +1,7 @@
-require 'Mongo'
+require 'rubygems'
+require 'sinatra'
+require 'mongo'
+require 'bson' # required for .to_json
 
 class ProduceMarketServerMongodb
 
@@ -19,20 +22,25 @@ class ProduceMarketServerMongodb
 
 
   def getPrices
-    prices = @client['prices'].find().to_a
+    prices = @client['prices'].find.to_a
     idify(prices)
   end
 
   def getPrice(i)
-    return @prices.select { |p| p['Id'].to_s == i }
+
+    prices = @client['prices'].find(:_id => BSON::ObjectId(i)).to_a
+    idify(prices)
+
   end
 
   def getSales
-    return @sales
+    prices = @client['sales'].find.to_a
+    idify(prices)
   end
 
   def getSale(i)
-    return @sales.select { |p| p['Id'].to_s == i }
+    prices = @client['sales'].find(:_id => BSON::ObjectId(i)).to_a
+    idify(prices)
   end
 
   def getPriceChanges
