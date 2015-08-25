@@ -1,24 +1,26 @@
-class ProduceMarketServer
+require 'Mongo'
+
+class ProduceMarketServerMongodb
 
   MAX_HANDS = 4
 
+  def addId(row)
+    row['Id'] = row['_id'].to_s
+    row
+  end
+
+  def idify(arr)
+    arr.each {|i| addId(i)}
+  end
+
   def initialize
-    file = File.read('./data/prices.json')
-    data_hash = JSON.parse(file)
-    @prices = data_hash
-
-    file = File.read('./data/sales.json')
-    data_hash = JSON.parse(file)
-    @sales = data_hash
-
-    file = File.read('./data/priceChanges.json')
-    data_hash = JSON.parse(file)
-    @priceChanges = data_hash
+    @client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'ProduceMarket')
   end
 
 
   def getPrices
-    return @prices
+    prices = @client['prices'].find().to_a
+    idify(prices)
   end
 
   def getPrice(i)
