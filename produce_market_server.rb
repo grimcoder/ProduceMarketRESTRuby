@@ -81,7 +81,6 @@ class ProduceMarketServer
 
   def updateSale(ng_params)
 
-    oldSale = @sales.find {|i| i['Id'] == ng_params['Id']}
     @sales = @sales.reject {|i| i['Id'] == ng_params['Id']}
     @sales << ng_params
     saveToFileAll
