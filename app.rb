@@ -1,16 +1,15 @@
 require 'sinatra'
 require 'json'
-require './produce_market_server_mongo_db'
 require './produce_market_server'
-
+require './produce_market_server_mongodb'
 
 if ARGV[0] == 'mongodb'
-  server = ProduceMarketServerMongoDB.new
+  server = ProduceMarketServerMongodb.new
 else
   server = ProduceMarketServer.new
 end
 
-  set :port, 3001
+set :port, 3001
 # set CORS
 
 before do

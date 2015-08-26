@@ -1,7 +1,5 @@
 class ProduceMarketServer
 
-  # attr_reader @prices
-
   MAX_HANDS = 4
 
   def initialize
@@ -17,6 +15,7 @@ class ProduceMarketServer
     data_hash = JSON.parse(file)
     @priceChanges = data_hash
   end
+
 
   def getPrices
     return @prices
@@ -48,6 +47,7 @@ class ProduceMarketServer
     tmp['Action'] = 'Edit'
     tmp["priceWas"] = oldprice['Price']
     @priceChanges << tmp
+    saveToFileAll
   end
 
   def deletePrice(id)
@@ -57,11 +57,15 @@ class ProduceMarketServer
     oldprice['Action'] = 'Delete'
     oldprice['priceWas'] = 'n/a'
     @priceChanges << oldprice
+
+    saveToFileAll
   end
+
 
   def deleteSale(id)
     oldprice = @sales.find {|i| i['Id'].to_s == id}
     @sales = @sales.reject {|i| i['Id'].to_s == id}
+    saveToFileAll
   end
 
   def createPrice(ng_params)
@@ -72,18 +76,30 @@ class ProduceMarketServer
     tmp['Action'] = 'New'
     tmp["priceWas"] = 'n/a'
     @priceChanges << tmp
+    saveToFileAll
   end
 
   def updateSale(ng_params)
-    oldSale = @sales.find {|i| i['Id'] == ng_params['Id']}
+
     @sales = @sales.reject {|i| i['Id'] == ng_params['Id']}
     @sales << ng_params
+    saveToFileAll
   end
 
   def createSale(ng_params)
     newId = @sales.max{|a,b| a['Id'] <=> b['Id']}['Id'] + 1
     ng_params['Id'] = newId
     @sales << ng_params
+
+    saveToFileAll
+
   end
 
+  def saveToFileAll
+
+    File.open('./data/prices.json', 'w'){ |file| file.write(@prices.to_json)}
+    File.open('./data/sales.json', 'w') { |file| file.write(@sales.to_json)}
+    File.open('./data/priceChanges.json', 'w') { |file| file.write(@priceChanges.to_json)}
+
+  end
 end
