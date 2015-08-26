@@ -61,7 +61,6 @@ class ProduceMarketServerMongodb
     pricewas = prices['Price']
     @client['prices'].find(:_id => BSON::ObjectId(id)).delete_one
     @client['prices'].insert_one(ng_params)
-
     tmp = ng_params.clone
     tmp['Action'] = 'Edit'
     tmp["priceWas"] = pricewas
@@ -72,7 +71,6 @@ class ProduceMarketServerMongodb
   def deletePrice(id)
     oldprice = @client['prices'].find(:_id => BSON::ObjectId(id)).first
     @client['prices'].find(:_id => BSON::ObjectId(id)).delete_one
-
     oldprice['Action'] = 'Delete'
     oldprice["priceWas"] = 'n/a'
     @client['priceChanges'].insert_one(oldprice)
