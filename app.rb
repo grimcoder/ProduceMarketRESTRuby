@@ -10,6 +10,7 @@ else
 end
 
 set :port, 3001
+set :bind, '0.0.0.0'
 # set CORS
 
 before do
